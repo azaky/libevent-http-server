@@ -1,11 +1,13 @@
 # libevent-http-server
-A simple http server using libevent
+A simple http server using libevent. More info about libevent, visit [http://libevent.org/](http://libevent.org/)
 
 ## How to run
 Compilation:
+
 	gcc -o server server.c -levent
 
 Running:
+
 	./server [port, defaults to 8080]
 
 ## Storing files
