@@ -107,12 +107,14 @@ static int encode_request_to_file_path(const char* uri, char** whole_path) {
 	}
 
 	if (S_ISDIR(st.st_mode)) {
+		
 		// Find index.html of this page
-		if (*whole_path[strlen(*whole_path) - 1] == '/') {
+		if ((*whole_path)[strlen(*whole_path) - 1] == '/') {
 			strcat(*whole_path, "index.html");
 		} else {
 			strcat(*whole_path, "/index.html");
 		}
+
 		if (stat(*whole_path, &st) < 0) {
 			evhttp_uri_free(decoded);
 			free(decoded_path);

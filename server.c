@@ -132,13 +132,11 @@ void buf_read_callback(struct bufferevent *incoming, void *arg) {
 	bufferevent_write_buffer(incoming, event_response);
 	evbuffer_free(event_response);
 	free(request);
-}
-
-void buf_write_callback(struct bufferevent *bev, void *arg) {
-	// unused
+	free(path);
 }
 
 void buf_error_callback(struct bufferevent *bev, short what, void *arg) {
+	printf("Nih kepanggil\n");
 	struct client *client = (struct client *)arg;
 	bufferevent_free(client->buf_ev);
 	close(client->fd);
@@ -150,6 +148,7 @@ void accept_callback(int fd, short ev, void *arg) {
 	struct sockaddr_in client_addr;
 	socklen_t client_len = sizeof(client_addr);
 	struct client *client;
+	struct timeval *timeout;
 
 	client_fd = accept(fd, (struct sockaddr *)&client_addr, &client_len);
 	if (client_fd < 0) {
@@ -168,11 +167,15 @@ void accept_callback(int fd, short ev, void *arg) {
 	client->buf_ev = bufferevent_new(
 			client_fd,
 			buf_read_callback,
-			buf_write_callback,
+			NULL,
 			buf_error_callback,
 			client);
 
 	bufferevent_enable(client->buf_ev, EV_READ);
+
+	timeout = (struct timeval*)malloc(sizeof(struct timeval*));
+	timeout->tv_usec = 100000;
+	bufferevent_set_timeouts(client->buf_ev, timeout, NULL);
 }
 
 int initialize_socket(int port) {
