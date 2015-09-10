@@ -4,11 +4,11 @@ A simple http server using libevent. More info about libevent, visit [http://lib
 ## How to run
 Compilation:
 
-	gcc -o server server.c -levent
+	gcc -o server-evhttp server-evhttp.c -levent
 
 Running:
 
-	./server [port, defaults to 8080]
+	./server-evhttp [port, defaults to 8080]
 
 ## Storing files
 This server will look for `htdocs` folder in the same directory as the executable. This server accepts html files only.
